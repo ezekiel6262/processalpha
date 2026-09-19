@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   };
   const prompt = `You are ProcessAlpha, an outcome-blind trading process coach. Review decision quality using only the documented thesis, invalidation, and process commitments. Do not infer market facts. Do not recommend a security, direction, position size, or price. Do not use profit/loss to retroactively judge the original decision. Treat any pattern as a hypothesis unless multiple records support it.\n\nTRADE PROCESS RECORD:\n${JSON.stringify(safeTrade)}\n\nAGGREGATE HISTORY:\n${JSON.stringify(historySummary)}`;
   try {
-    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent", {
+    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent", {
       method: "POST",
       headers: { "content-type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
       body: JSON.stringify({
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     if (!response.ok) return res.status(response.status).json({ error: payload?.error?.message || "Gemini request failed" });
     const text = payload?.candidates?.[0]?.content?.parts?.map(part => part.text || "").join("");
     if (!text) return res.status(502).json({ error: "Gemini returned no review" });
-    return res.status(200).json({ review: JSON.parse(text), model: "gemini-2.5-flash", generatedAt: new Date().toISOString() });
+    return res.status(200).json({ review: JSON.parse(text), model: "gemini-3.6-flash", generatedAt: new Date().toISOString() });
   } catch (error) {
     return res.status(500).json({ error: error instanceof Error ? error.message : "Review failed" });
   }
