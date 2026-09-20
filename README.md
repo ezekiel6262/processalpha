@@ -18,7 +18,7 @@ Completed trade process record
         +--> /api/review --> Gemini 3.6 Flash outcome-blind coaching
 ```
 
-Cloud synchronization is designed around Supabase Auth, Postgres and row-level security. Until that marketplace resource is provisioned, the production health endpoint reports the journal as `browser-local`; records remain real and exportable, but device-local.
+Cloud synchronization uses Supabase Auth, Postgres and row-level security. Users can work locally without an account, then use passwordless email sign-in to synchronize their journal across devices. Existing local records are merged into the authenticated account on first sign-in.
 
 ## Production safeguards
 
@@ -41,4 +41,4 @@ Required secret: `GEMINI_API_KEY`.
 
 ## Privacy and limitations
 
-Trade records currently remain inside the user's browser unless exported. Gemini receives thesis, invalidation and four process booleans, but not prices or realized outcome. ProcessAlpha provides reflection support, not financial advice.
+Unsigned users' records remain inside their browser unless exported. Signed-in users' records are stored in Supabase with per-user RLS ownership policies. Gemini receives thesis, invalidation and four process booleans, but not prices or realized outcome. ProcessAlpha provides reflection support, not financial advice.

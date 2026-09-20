@@ -19,16 +19,20 @@ alter table public.trades enable row level security;
 revoke all on table public.trades from anon;
 grant select, insert, update, delete on table public.trades to authenticated;
 
+drop policy if exists "Users read their own trades" on public.trades;
 create policy "Users read their own trades" on public.trades for select to authenticated
 using ((select auth.uid()) = user_id);
 
+drop policy if exists "Users insert their own trades" on public.trades;
 create policy "Users insert their own trades" on public.trades for insert to authenticated
 with check ((select auth.uid()) = user_id);
 
+drop policy if exists "Users update their own trades" on public.trades;
 create policy "Users update their own trades" on public.trades for update to authenticated
 using ((select auth.uid()) = user_id)
 with check ((select auth.uid()) = user_id);
 
+drop policy if exists "Users delete their own trades" on public.trades;
 create policy "Users delete their own trades" on public.trades for delete to authenticated
 using ((select auth.uid()) = user_id);
 
