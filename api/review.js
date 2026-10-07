@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return reply(405, { error: "POST required" });
   if (!allowRequest(req)) return reply(429, { error: "Too many review requests. Try again in a minute." });
   if (bodyTooLarge(req)) return reply(413, { error: "Request is too large" });
-  if (!process.env.GEMINI_API_KEY) return reply(503, { error: "Gemini is not configured" });
+  if (!process.env.GEMINI_API_KEY) return reply(503, { error: "Process review is temporarily unavailable" });
   const trade = req.body?.trade;
   const historySummary = req.body?.historySummary || {};
   if (!trade || !trade.symbol || !trade.thesis || !trade.invalidation) return reply(400, { error: "A complete trade record is required" });
@@ -37,15 +37,15 @@ export default async function handler(req, res) {
       headers: { "content-type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
       body: JSON.stringify({
         contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.2, responseMimeType: "application/json", responseJsonSchema: schema }
+        generationConfig: { temperature: 0.2, maxOutputTokens: 1200, responseMimeType: "application/json", responseJsonSchema: schema }
       })
     });
     const payload = await response.json();
-    if (!response.ok) return reply(response.status, { error: payload?.error?.message || "Gemini request failed" }, { provider: "gemini" });
+    if (!response.ok) return reply(response.status >= 500 ? 502 : response.status, { error: "Process review is temporarily unavailable" }, { provider: "gemini", providerStatus: response.status });
     const text = payload?.candidates?.[0]?.content?.parts?.map(part => part.text || "").join("");
-    if (!text) return reply(502, { error: "Gemini returned no review" });
-    return reply(200, { review: JSON.parse(text), model: "gemini-3.6-flash", generatedAt: new Date().toISOString() });
+    if (!text) return reply(502, { error: "Process review is temporarily unavailable" });
+    return reply(200, { review: JSON.parse(text), generatedAt: new Date().toISOString() });
   } catch (error) {
-    return reply(error?.name === "AbortError" ? 504 : 500, { error: error?.name === "AbortError" ? "Review timed out. Please retry." : error instanceof Error ? error.message : "Review failed" });
+    return reply(error?.name === "AbortError" ? 504 : 500, { error: error?.name === "AbortError" ? "Review timed out. Please retry." : "Process review is temporarily unavailable" });
   }
 }

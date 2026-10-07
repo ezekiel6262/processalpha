@@ -4,7 +4,7 @@
 
 [Open the product](https://processalpha.vercel.app) · [Launch the journal](https://processalpha.vercel.app/app) · [System health](https://processalpha.vercel.app/api/health)
 
-ProcessAlpha helps traders evaluate how they made a decision instead of letting the eventual profit or loss rewrite the story. It records the original thesis and invalidation condition, calculates a deterministic process score, finds repeated rule violations, and asks Gemini for outcome-blind coaching.
+ProcessAlpha helps traders evaluate how they made a decision instead of letting the eventual profit or loss rewrite the story. It records the original thesis and invalidation condition, calculates a deterministic process score, finds repeated rule violations, and generates outcome-blind process coaching.
 
 ## Why it exists
 
@@ -14,7 +14,7 @@ A profitable trade can come from a poor process, while a disciplined decision ca
 
 - Local-first IndexedDB journal that works without an account.
 - Deterministic scoring from four pre-committed process checks.
-- Gemini 3.6 Flash review that never receives prices or realized P&L.
+- Private process review that never receives prices or realized P&L.
 - Pattern detection across recorded decisions.
 - Passwordless Supabase authentication and cross-device synchronization.
 - JSON export for user-controlled portability.
@@ -26,7 +26,7 @@ flowchart LR
     U[Completed trade record] --> L[IndexedDB]
     U --> S[Process score]
     U --> R[Vercel /api/review]
-    R --> G[Gemini outcome-blind review]
+    R --> G[Outcome-blind process review]
     L <--> C[Supabase Auth + Postgres]
     C --> P[Per-user RLS]
     S --> UI[Journal + patterns]
@@ -61,7 +61,7 @@ This requires `SUPABASE_DB_URL`. Use a development database and review the migra
 
 | Variable | Scope | Purpose |
 | --- | --- | --- |
-| `GEMINI_API_KEY` | Server only | Outcome-blind Gemini review |
+| `GEMINI_API_KEY` | Server only | Outcome-blind process review provider |
 | `NEXT_PUBLIC_SUPABASE_URL` | Public | Project URL returned by `/api/config` |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public | Restricted browser client key |
 | `SUPABASE_DB_URL` | Local migration only | Postgres connection for `npm run migrate` |
@@ -71,7 +71,7 @@ Never place a Supabase service-role key or database URL in browser code.
 ## Repository map
 
 ```text
-api/review.js        privacy-filtered Gemini process review
+api/review.js        privacy-filtered process review
 api/config.js        safe public cloud configuration
 api/health.js        deployment readiness endpoint
 api/_lib/security.js validation, throttling, timeouts, response helpers
