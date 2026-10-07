@@ -1,0 +1,13 @@
+file 'screens/01-homepage.png'
+duration 25
+file 'screens/02-journal-empty.png'
+duration 22
+file 'screens/03-scored-review.png'
+duration 45
+file 'screens/04-patterns.png'
+duration 28
+file 'screens/05-rulebook.png'
+duration 25
+file 'screens/01-homepage.png'
+duration 10
+file 'screens/01-homepage.png'

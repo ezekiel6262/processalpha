@@ -1,0 +1,21 @@
+Meet ProcessAlpha, an outcome-blind decision journal for active traders.
+
+Most trading journals focus on profit and loss. That creates hindsight bias, because a profitable trade can still come from a weak decision, while a disciplined trade can lose because of normal market variance.
+
+ProcessAlpha separates those two signals.
+
+For every completed trade, the user records the symbol, direction, entry and exit prices, the original thesis, and the condition that would invalidate it. Four process commitments create a transparent one hundred point score: risk definition, opposing evidence, planned confirmation, and exit discipline.
+
+The financial outcome is calculated separately. ProcessAlpha then places the record in a decision and outcome matrix, so users can distinguish repeatable skill from favorable randomness.
+
+The private process review receives the written decision record and process checks, but not entry price, exit price, or realized profit and loss. It produces educational feedback, identifies strengths, and suggests one concrete rule to test next. It does not recommend an asset, direction, price, or position size.
+
+The Patterns workspace calculates adherence rates and recurring gaps only from the user's real records. There is no seeded data and no fabricated insight.
+
+The Rulebook turns those observations into concise, testable constraints for future trades. Records work locally without an account, can be exported as JSON, and can synchronize privately after passwordless sign in.
+
+ProcessAlpha is not a signal generator. It is a feedback loop for better decisions: record the reasoning, separate process from outcome, find the repeated gap, and improve the next rule.
+
+ProcessAlpha. Measure the decision, not just the result.
+
+This narration uses an AI-generated voice.
