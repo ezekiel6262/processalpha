@@ -1,0 +1,14 @@
+.paperchart{margin-top:15px}
+.chartwrap{min-height:390px;border:1px solid var(--line);overflow-x:auto;background:var(--white)}
+.chartwrap svg{display:block;width:100%;min-width:720px;height:auto}
+.chartgrid{stroke:#dedbd1;stroke-width:1}
+.chartaxis{fill:var(--muted);font:10px ui-monospace,monospace}
+.chartlabel{fill:white;font:700 9px ui-monospace,monospace}
+.chartloading{min-height:388px;display:grid;place-items:center;align-content:center;gap:6px;color:var(--muted)}
+.chartloading b{color:var(--ink);font:700 20px Georgia,serif}
+.chartloading span{font-size:12px}
+.chartposition{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--ink);border-top:0}
+.chartposition div{padding:12px;border-right:1px solid var(--line);display:grid}
+.chartposition div:last-child{border-right:0}
+.chartposition small{font:10px ui-monospace,monospace;color:var(--muted)}
+@media(max-width:700px){.chartposition{grid-template-columns:1fr 1fr}.chartposition div:nth-child(2){border-right:0}}

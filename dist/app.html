@@ -6,7 +6,7 @@
   <title>ProcessAlpha | Trading decision journal</title>
   <meta name="description" content="Capture, score, and improve real trading decisions without hindsight bias.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2317201d'/%3E%3Cpath d='M16 43V21h13c9 0 14 4 14 11S38 43 29 43H16zm9-7h5c3 0 5-1 5-4s-2-4-5-4h-5v8z' fill='%23d8ff78'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="/app.css"><style>[hidden]{display:none!important}.deleteRecord{border:0;background:transparent;color:var(--red);padding:8px 0;font-weight:800;cursor:pointer}</style>
+  <link rel="stylesheet" href="/app.css"><link rel="stylesheet" href="/chart.css"><style>[hidden]{display:none!important}.deleteRecord{border:0;background:transparent;color:var(--red);padding:8px 0;font-weight:800;cursor:pointer}</style>
 </head>
 <body>
   <header class="topbar">
@@ -35,6 +35,7 @@
         </section>
         <section class="card historycard"><div class="cardhead"><h2>Execution queue</h2><span id="planCount">0 plans</span></div><div id="planList"></div></section>
       </div><section id="planDetail" class="reviewgrid" hidden></section>
+      <section id="paperChartCard" class="card paperchart" hidden><div class="cardhead"><h2>Paper trade chart</h2><span>Live Bitget / 15m</span></div><div id="paperChart" class="chartwrap" aria-live="polite"></div><div id="paperPosition" class="chartposition"></div></section>
     </section>
     <section class="view" id="agentView">
       <div class="pagehead"><div><p class="eyebrow">02 / Agent</p><h1>Execution with<br><mark>hard boundaries.</mark></h1></div><p>ProcessAlpha validates every proposed order against your frozen plan and risk policy. Paper mode is the default. Live mode stays blocked until Bitget OAuth is connected.</p></div>
