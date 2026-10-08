@@ -6,20 +6,21 @@
   <title>ProcessAlpha | Trading decision journal</title>
   <meta name="description" content="Capture, score, and improve real trading decisions without hindsight bias.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2317201d'/%3E%3Cpath d='M16 43V21h13c9 0 14 4 14 11S38 43 29 43H16zm9-7h5c3 0 5-1 5-4s-2-4-5-4h-5v8z' fill='%23d8ff78'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="/app.css"><link rel="stylesheet" href="/chart.css"><style>[hidden]{display:none!important}.deleteRecord{border:0;background:transparent;color:var(--red);padding:8px 0;font-weight:800;cursor:pointer}</style>
+  <link rel="stylesheet" href="/app.css"><link rel="stylesheet" href="/chart.css"><link rel="stylesheet" href="/onboarding.css"><style>[hidden]{display:none!important}.deleteRecord{border:0;background:transparent;color:var(--red);padding:8px 0;font-weight:800;cursor:pointer}</style>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="/">ProcessAlpha <span>Decision journal</span></a>
     <nav class="tabs" aria-label="Workspace">
-      <button class="active" data-view="plan">Plan</button><button data-view="agent">Agent</button><button data-view="journal">Audit</button><button data-view="patterns">Patterns</button><button data-view="rulebook">Playbook</button>
+      <button data-view="rulebook">Trading Rules</button><button class="active" data-view="plan">Plan a Trade</button><button data-view="agent">Risk &amp; Execution</button><button data-view="journal">Close &amp; Review</button><button data-view="patterns">Insights</button>
     </nav>
     <button class="button ghost" id="export" type="button">Export</button>
   </header>
   <aside class="syncbar" aria-label="Cloud sync"><div><span class="syncdot"></span><strong id="cloudState">Local journal</strong><small>Your journal works without an account.</small></div><div class="auth"><input id="authEmail" type="email" autocomplete="email" placeholder="Email address"><button class="button" id="authAction" type="button">Sync securely</button></div></aside>
   <main>
+    <section class="onboarding" id="onboarding" aria-label="Getting started"><div class="onboarding-copy"><p class="eyebrow">Your first paper trade</p><h2 id="guideTitle">Build one rule before you trade</h2><p id="guideText">ProcessAlpha guides you from a written rule to a reviewed result. No exchange connection is needed for paper trading.</p><button class="button" id="guideAction" type="button">Create a trading rule</button></div><ol id="guideSteps"><li data-guide-step="rule"><b>1</b><span>Trading rule</span></li><li data-guide-step="plan"><b>2</b><span>Locked plan</span></li><li data-guide-step="execute"><b>3</b><span>Paper execution</span></li><li data-guide-step="review"><b>4</b><span>Close and review</span></li><li data-guide-step="insights"><b>5</b><span>Insights</span></li></ol></section>
     <section class="view active" id="planView">
-      <div class="pagehead"><div><p class="eyebrow">01 / Plan</p><h1>Commit before<br><mark>the market answers.</mark></h1></div><p>Write the setup, risk, invalidation, and applicable playbook rules before execution. Saved plans are timestamped and locked against hindsight edits.</p></div>
+      <div class="pagehead"><div><p class="eyebrow">02 / Plan a Trade</p><h1>Commit before<br><mark>the market answers.</mark></h1></div><p>Write the setup, risk, invalidation, and applicable trading rules before execution. Saved plans are timestamped and locked against hindsight edits.</p></div>
       <div class="journalgrid">
         <section class="card entrycard"><div class="cardhead"><h2>Create a pre-trade plan</h2><span>Paper mode</span></div>
           <form id="planForm">
@@ -38,7 +39,7 @@
       <section id="paperChartCard" class="card paperchart" hidden><div class="cardhead"><h2>Paper trade chart</h2><span>Live Bitget / 15m</span></div><div id="paperChart" class="chartwrap" aria-live="polite"></div><div id="paperPosition" class="chartposition"></div></section>
     </section>
     <section class="view" id="agentView">
-      <div class="pagehead"><div><p class="eyebrow">02 / Agent</p><h1>Execution with<br><mark>hard boundaries.</mark></h1></div><p>ProcessAlpha validates every proposed order against your frozen plan and risk policy. Paper mode is the default. Live mode stays blocked until Bitget OAuth is connected.</p></div>
+      <div class="pagehead"><div><p class="eyebrow">03 / Risk &amp; Execution</p><h1>Execution with<br><mark>hard boundaries.</mark></h1></div><p>Preview and approve simulated orders against your frozen plan and risk policy. Paper mode is the default, so no real funds are used.</p></div>
       <div class="rulegrid">
         <section class="card"><div class="cardhead"><h2>Agent controls</h2><span id="agentModeLabel">Paper only</span></div><form id="riskForm">
           <label>Execution mode<select name="mode"><option value="paper">Paper trading</option><option value="readonly">Read only</option><option value="live">Live, requires connection</option></select></label>
@@ -52,7 +53,7 @@
       <section class="card receipts"><div class="cardhead"><h2>Execution receipts</h2><span id="receiptCount">0 receipts</span></div><div id="receiptList"></div></section>
     </section>
     <section class="view" id="journalView">
-      <div class="pagehead"><div><p class="eyebrow">03 / Audit</p><h1>Compare execution.<br><mark>Then judge the process.</mark></h1></div><p>Complete a locked plan or add a manual record. The audit separates process quality from financial outcome, so luck cannot rewrite the decision.</p></div>
+      <div class="pagehead"><div><p class="eyebrow">04 / Close &amp; Review</p><h1>Compare execution.<br><mark>Then judge the process.</mark></h1></div><p>Close an open paper position and review whether you followed the plan. Process quality stays separate from profit or loss.</p></div>
       <div class="journalgrid">
         <section class="card entrycard"><div class="cardhead"><h2>Complete and audit trade</h2><span>100 points</span></div>
           <form id="form">
@@ -72,8 +73,8 @@
         <section class="card historycard"><div class="cardhead"><h2>Decision history</h2><span id="recordCount">0 records</span></div><div id="history"></div></section>
       </div><section id="review" class="reviewgrid" hidden></section>
     </section>
-    <section class="view" id="patternsView"><div class="pagehead"><div><p class="eyebrow">03 / Patterns</p><h1>See what repeats,<br><mark>not what stings.</mark></h1></div><p>Process patterns are calculated only from your saved records. No sample trades or invented insights.</p></div><div id="patternsContent"></div></section>
-    <section class="view" id="rulebookView"><div class="pagehead"><div><p class="eyebrow">04 / Playbook</p><h1>Turn evidence into<br><mark>testable rules.</mark></h1></div><p>Create concise constraints that can be attached to a pre-trade plan and audited after execution.</p></div><div class="rulegrid"><section class="card"><div class="cardhead"><h2>Add a rule</h2><span>Keep it observable</span></div><form id="ruleForm"><label>Rule<textarea name="text" maxlength="240" required placeholder="Example: I only enter after the planned confirmation closes."></textarea></label><button class="button full" type="submit">Add to playbook</button></form></section><section class="card"><div class="cardhead"><h2>Active rules</h2><span id="ruleCount">0 rules</span></div><div id="ruleList"></div></section></div></section>
+    <section class="view" id="patternsView"><div class="pagehead"><div><p class="eyebrow">05 / Insights</p><h1>See what repeats,<br><mark>not what stings.</mark></h1></div><p>Behavioral insights are calculated only from your saved records. No sample trades or invented conclusions.</p></div><div id="patternsContent"></div></section>
+    <section class="view" id="rulebookView"><div class="pagehead"><div><p class="eyebrow">01 / Trading Rules</p><h1>Turn evidence into<br><mark>testable rules.</mark></h1></div><p>Start here. Write one observable rule that ProcessAlpha can attach to a trade plan and check after execution.</p></div><div class="rulegrid"><section class="card"><div class="cardhead"><h2>Create a trading rule</h2><span>Keep it observable</span></div><form id="ruleForm"><label>Rule<textarea name="text" maxlength="240" required placeholder="Example: I only enter after the planned confirmation closes."></textarea></label><button class="button full" type="submit">Save trading rule</button></form></section><section class="card"><div class="cardhead"><h2>Your trading rules</h2><span id="ruleCount">0 rules</span></div><div id="ruleList"></div></section></div></section>
   </main>
   <footer><a href="/">Home</a><span>Process improvement, not financial advice.</span><span><a href="/privacy">Privacy</a><a href="/terms">Terms</a></span></footer>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.min.js" crossorigin="anonymous"></script><script src="/app.js"></script>
