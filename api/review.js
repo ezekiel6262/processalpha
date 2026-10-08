@@ -28,9 +28,15 @@ export default async function handler(req, res) {
     symbol: String(trade.symbol).slice(0, 30), side: String(trade.side).slice(0, 10),
     thesis: String(trade.thesis).slice(0, 3000), invalidation: String(trade.invalidation).slice(0, 2000),
     riskDefined: Boolean(trade.risk), opposingEvidenceRecorded: Boolean(trade.evidence),
-    confirmationWaited: Boolean(trade.confirm), exitRuleFollowed: Boolean(trade.followed)
+    confirmationWaited: Boolean(trade.confirm), exitRuleFollowed: Boolean(trade.followed),
+    preTradePlan: trade.plan ? {
+      lockedAt: trade.plan.created,
+      plannedEntry: Number(trade.plan.plannedEntry), stopPrice: Number(trade.plan.stopPrice),
+      targetPrice: Number(trade.plan.targetPrice), maximumAccountRiskPercent: Number(trade.plan.riskPercent),
+      attachedRuleCount: Array.isArray(trade.plan.ruleIds) ? trade.plan.ruleIds.length : 0
+    } : null
   };
-  const prompt = `You are ProcessAlpha, an outcome-blind trading process coach. Review decision quality using only the documented thesis, invalidation, and process commitments. Do not infer market facts. Do not recommend a security, direction, position size, or price. Do not use profit/loss to retroactively judge the original decision. Treat any pattern as a hypothesis unless multiple records support it.\n\nTRADE PROCESS RECORD:\n${JSON.stringify(safeTrade)}\n\nAGGREGATE HISTORY:\n${JSON.stringify(historySummary)}`;
+  const prompt = `You are ProcessAlpha, an outcome-blind trading process coach. Review decision quality using only the frozen pre-trade plan, documented thesis, invalidation, and process commitments. If a frozen plan is present, explicitly compare execution discipline against that plan. Do not infer market facts. Do not recommend a security, direction, position size, or price. Do not use profit/loss to retroactively judge the original decision. Treat any pattern as a hypothesis unless multiple records support it.\n\nTRADE PROCESS RECORD:\n${JSON.stringify(safeTrade)}\n\nAGGREGATE HISTORY:\n${JSON.stringify(historySummary)}`;
   try {
     const response = await fetchWithTimeout("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent", {
       method: "POST",

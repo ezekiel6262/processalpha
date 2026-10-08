@@ -12,17 +12,36 @@
   <header class="topbar">
     <a class="brand" href="/">ProcessAlpha <span>Decision journal</span></a>
     <nav class="tabs" aria-label="Workspace">
-      <button class="active" data-view="journal">Journal</button><button data-view="patterns">Patterns</button><button data-view="rulebook">Rulebook</button>
+      <button class="active" data-view="plan">Plan</button><button data-view="journal">Audit</button><button data-view="patterns">Patterns</button><button data-view="rulebook">Playbook</button>
     </nav>
     <button class="button ghost" id="export" type="button">Export</button>
   </header>
   <aside class="syncbar" aria-label="Cloud sync"><div><span class="syncdot"></span><strong id="cloudState">Local journal</strong><small>Your journal works without an account.</small></div><div class="auth"><input id="authEmail" type="email" autocomplete="email" placeholder="Email address"><button class="button" id="authAction" type="button">Sync securely</button></div></aside>
   <main>
-    <section class="view active" id="journalView">
-      <div class="pagehead"><div><p class="eyebrow">01 / Journal</p><h1>Record the decision.<br><mark>Then judge the process.</mark></h1></div><p>Every score is calculated from the commitments you record. Financial outcome stays separate, so luck cannot rewrite the decision.</p></div>
+    <section class="view active" id="planView">
+      <div class="pagehead"><div><p class="eyebrow">01 / Plan</p><h1>Commit before<br><mark>the market answers.</mark></h1></div><p>Write the setup, risk, invalidation, and applicable playbook rules before execution. Saved plans are timestamped and locked against hindsight edits.</p></div>
       <div class="journalgrid">
-        <section class="card entrycard"><div class="cardhead"><h2>Add a completed trade</h2><span>100 points</span></div>
+        <section class="card entrycard"><div class="cardhead"><h2>Create a pre-trade plan</h2><span>Paper mode</span></div>
+          <form id="planForm">
+            <div class="fields two"><label>Symbol<input name="symbol" list="symbols" required maxlength="30" placeholder="Search, for example BTCUSDT"></label><label>Side<select name="side"><option>Long</option><option>Short</option></select></label></div>
+            <div class="fields two"><label>Planned entry<input name="plannedEntry" type="number" step="any" min="0" required></label><label>Stop / invalidation price<input name="stopPrice" type="number" step="any" min="0" required></label></div>
+            <div class="fields two"><label>Target price<input name="targetPrice" type="number" step="any" min="0" required></label><label>Maximum account risk, %<input name="riskPercent" type="number" step="0.1" min="0.1" max="5" required value="1"></label></div>
+            <label>Pre-trade thesis<textarea name="thesis" required maxlength="3000" placeholder="What must happen, why, and over what horizon?"></textarea></label>
+            <label>Observable invalidation<textarea name="invalidation" required maxlength="2000" placeholder="What would prove this thesis wrong?"></textarea></label>
+            <fieldset><legend>Playbook rules applied</legend><div id="planRules"></div></fieldset>
+            <label class="check"><input type="checkbox" name="confirmed" required><span><b>Freeze this plan</b>I confirm this was written before execution and cannot be edited after saving.</span></label>
+            <p class="formerror" id="planError" role="alert"></p><button class="button full" type="submit">Lock pre-trade plan</button>
+          </form>
+        </section>
+        <section class="card historycard"><div class="cardhead"><h2>Execution queue</h2><span id="planCount">0 plans</span></div><div id="planList"></div></section>
+      </div><section id="planDetail" class="reviewgrid" hidden></section>
+    </section>
+    <section class="view" id="journalView">
+      <div class="pagehead"><div><p class="eyebrow">02 / Audit</p><h1>Compare execution.<br><mark>Then judge the process.</mark></h1></div><p>Complete a locked plan or add a manual record. The audit separates process quality from financial outcome, so luck cannot rewrite the decision.</p></div>
+      <div class="journalgrid">
+        <section class="card entrycard"><div class="cardhead"><h2>Complete and audit trade</h2><span>100 points</span></div>
           <form id="form">
+            <input name="planId" type="hidden">
             <div class="fields two"><label>Symbol<input name="symbol" list="symbols" required maxlength="30" placeholder="Search, for example BTCUSDT"><datalist id="symbols"><option value="BTCUSDT"><option value="ETHUSDT"><option value="SOLUSDT"><option value="BNBUSDT"><option value="XRPUSDT"><option value="DOGEUSDT"><option value="ADAUSDT"><option value="AVAXUSDT"><option value="LINKUSDT"><option value="SUIUSDT"></datalist></label><label>Side<select name="side"><option>Long</option><option>Short</option></select></label></div>
             <div class="fields two"><label>Entry price<input name="entry" type="number" step="any" min="0" required inputmode="decimal"></label><label>Exit price<input name="exit" type="number" step="any" min="0" required inputmode="decimal"></label></div>
             <label>Thesis written before entry<textarea name="thesis" required maxlength="3000" placeholder="What did you expect, why, and over what horizon?"></textarea></label>
@@ -38,8 +57,8 @@
         <section class="card historycard"><div class="cardhead"><h2>Decision history</h2><span id="recordCount">0 records</span></div><div id="history"></div></section>
       </div><section id="review" class="reviewgrid" hidden></section>
     </section>
-    <section class="view" id="patternsView"><div class="pagehead"><div><p class="eyebrow">02 / Patterns</p><h1>See what repeats,<br><mark>not what stings.</mark></h1></div><p>Process patterns are calculated only from your saved records. No sample trades or invented insights.</p></div><div id="patternsContent"></div></section>
-    <section class="view" id="rulebookView"><div class="pagehead"><div><p class="eyebrow">03 / Rulebook</p><h1>Turn evidence into<br><mark>testable rules.</mark></h1></div><p>Create concise constraints you can check before the next trade. Your rulebook is stored on this device.</p></div><div class="rulegrid"><section class="card"><div class="cardhead"><h2>Add a rule</h2><span>Keep it observable</span></div><form id="ruleForm"><label>Rule<textarea name="text" maxlength="240" required placeholder="Example: I only enter after the planned confirmation closes."></textarea></label><button class="button full" type="submit">Add to rulebook</button></form></section><section class="card"><div class="cardhead"><h2>Active rules</h2><span id="ruleCount">0 rules</span></div><div id="ruleList"></div></section></div></section>
+    <section class="view" id="patternsView"><div class="pagehead"><div><p class="eyebrow">03 / Patterns</p><h1>See what repeats,<br><mark>not what stings.</mark></h1></div><p>Process patterns are calculated only from your saved records. No sample trades or invented insights.</p></div><div id="patternsContent"></div></section>
+    <section class="view" id="rulebookView"><div class="pagehead"><div><p class="eyebrow">04 / Playbook</p><h1>Turn evidence into<br><mark>testable rules.</mark></h1></div><p>Create concise constraints that can be attached to a pre-trade plan and audited after execution.</p></div><div class="rulegrid"><section class="card"><div class="cardhead"><h2>Add a rule</h2><span>Keep it observable</span></div><form id="ruleForm"><label>Rule<textarea name="text" maxlength="240" required placeholder="Example: I only enter after the planned confirmation closes."></textarea></label><button class="button full" type="submit">Add to playbook</button></form></section><section class="card"><div class="cardhead"><h2>Active rules</h2><span id="ruleCount">0 rules</span></div><div id="ruleList"></div></section></div></section>
   </main>
   <footer><a href="/">Home</a><span>Process improvement, not financial advice.</span><span><a href="/privacy">Privacy</a><a href="/terms">Terms</a></span></footer>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.min.js" crossorigin="anonymous"></script><script src="/app.js"></script>
