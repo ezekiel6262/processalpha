@@ -12,7 +12,7 @@
   <header class="topbar">
     <a class="brand" href="/">ProcessAlpha <span>Decision journal</span></a>
     <nav class="tabs" aria-label="Workspace">
-      <button class="active" data-view="plan">Plan</button><button data-view="journal">Audit</button><button data-view="patterns">Patterns</button><button data-view="rulebook">Playbook</button>
+      <button class="active" data-view="plan">Plan</button><button data-view="agent">Agent</button><button data-view="journal">Audit</button><button data-view="patterns">Patterns</button><button data-view="rulebook">Playbook</button>
     </nav>
     <button class="button ghost" id="export" type="button">Export</button>
   </header>
@@ -36,8 +36,22 @@
         <section class="card historycard"><div class="cardhead"><h2>Execution queue</h2><span id="planCount">0 plans</span></div><div id="planList"></div></section>
       </div><section id="planDetail" class="reviewgrid" hidden></section>
     </section>
+    <section class="view" id="agentView">
+      <div class="pagehead"><div><p class="eyebrow">02 / Agent</p><h1>Execution with<br><mark>hard boundaries.</mark></h1></div><p>ProcessAlpha validates every proposed order against your frozen plan and risk policy. Paper mode is the default. Live mode stays blocked until Bitget OAuth is connected.</p></div>
+      <div class="rulegrid">
+        <section class="card"><div class="cardhead"><h2>Agent controls</h2><span id="agentModeLabel">Paper only</span></div><form id="riskForm">
+          <label>Execution mode<select name="mode"><option value="paper">Paper trading</option><option value="readonly">Read only</option><option value="live">Live, requires connection</option></select></label>
+          <div class="fields two"><label>Maximum allocated capital, USDT<input name="maxCapital" type="number" min="1" step="1" required value="1000"></label><label>Daily loss limit, USDT<input name="dailyLoss" type="number" min="1" step="1" required value="50"></label></div>
+          <div class="fields two"><label>Maximum order, USDT<input name="maxOrder" type="number" min="1" step="1" required value="200"></label><label>Maximum leverage<input name="maxLeverage" type="number" min="1" max="5" step="1" required value="1"></label></div>
+          <label class="check"><input type="checkbox" name="confirmEveryOrder" checked disabled><span><b>Human confirmation required</b>Every order must be previewed and explicitly approved.</span></label>
+          <button class="button full" type="submit">Save risk policy</button>
+        </form></section>
+        <section class="card"><div class="cardhead"><h2>Bitget connection</h2><span id="connectionState">Not connected</span></div><p>An Agentic Account isolates agent funds from your primary Bitget balance and prevents withdrawals.</p><div class="connectionbox"><b>OAuth required</b><p class="note">Account authorization and device verification must be completed by you. ProcessAlpha will never ask you to paste an API key.</p><a class="button connectlink" href="https://www.bitget.com/support/articles/12560603894122" target="_blank" rel="noopener noreferrer">Open official connection guide</a></div><p class="note">Paper execution, dry-run previews, and receipt logging work without live authorization.</p></section>
+      </div>
+      <section class="card receipts"><div class="cardhead"><h2>Execution receipts</h2><span id="receiptCount">0 receipts</span></div><div id="receiptList"></div></section>
+    </section>
     <section class="view" id="journalView">
-      <div class="pagehead"><div><p class="eyebrow">02 / Audit</p><h1>Compare execution.<br><mark>Then judge the process.</mark></h1></div><p>Complete a locked plan or add a manual record. The audit separates process quality from financial outcome, so luck cannot rewrite the decision.</p></div>
+      <div class="pagehead"><div><p class="eyebrow">03 / Audit</p><h1>Compare execution.<br><mark>Then judge the process.</mark></h1></div><p>Complete a locked plan or add a manual record. The audit separates process quality from financial outcome, so luck cannot rewrite the decision.</p></div>
       <div class="journalgrid">
         <section class="card entrycard"><div class="cardhead"><h2>Complete and audit trade</h2><span>100 points</span></div>
           <form id="form">
